@@ -1,6 +1,7 @@
 //selecting the div class overview where profile information will appear
 const overview = document.querySelector(".overview");
 const username = "MarialiceH";
+const repoList = document.querySelector(".repo-list")
 
 const gitUserInfo = async function () {
     const userInfo = await fetch(`https://api.github.com/users/${username}`);
@@ -25,4 +26,20 @@ const displayUserInfo = function (data) {
         </div>
     `;
   overview.append(div);
+  gitRepoInfo()
+};;
+
+const gitRepoInfo = async function () {
+    const repoInfo = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+    const repoData = await repoInfo.json();
+    displayRepos(repoData);
+};
+
+const displayRepos = function (repos) {
+    for (const repo of repos) {
+        const repoItem = document.createElement("li");
+        repoItem.classList.add("repo");
+        repoItem.innerHTML = `<h3>${repo.name}</h3>`;
+        repoList.append(repoItem);
+    }
 };
